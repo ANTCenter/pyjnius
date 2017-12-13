@@ -60,6 +60,14 @@ $(installer "$JDK" "$UBUNTU") && apt-get install -y ant
 
 ADD . /pyjnius
 
+RUN apt-get install -y python-setuptools python3-setuptools \
+ && easy_install pip \
+ && easy_install3 pip \
+ && pip2 install --upgrade cython six \
+ && pip3 install --upgrade cython six
+
+RUN echo "today is $(date +%Y-%m-%d) and I am doing a dist-upgrade" && apt-get update && apt-get dist-upgrade -y
+
 CMD /pyjnius/.test.sh /out/$DOCKER_TAG
 HERE
 
@@ -72,11 +80,11 @@ if [ "$*" ]; then
 else
     do_test trusty openjdk-7-jdk
     do_test trusty openjdk-8-jdk
-    
+
     do_test xenial openjdk-7-jdk
     do_test xenial openjdk-8-jdk
     do_test xenial oracle-java8-installer
-    
+
     do_test artful openjdk-8-jdk
     do_test artful oracle-java8-installer
 fi
