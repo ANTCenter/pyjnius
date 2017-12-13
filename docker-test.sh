@@ -58,8 +58,6 @@ RUN apt-get install -y ipython ipython3 && ipython profile create && echo "c.Ter
 
 $(installer "$JDK" "$UBUNTU") && apt-get install -y ant
 
-ADD . /pyjnius
-
 RUN apt-get install -y python-setuptools python3-setuptools \
  && easy_install pip \
  && easy_install3 pip \
@@ -67,6 +65,9 @@ RUN apt-get install -y python-setuptools python3-setuptools \
  && pip3 install --upgrade cython six
 
 RUN echo "today is $(date +%Y-%m-%d) and I am doing a dist-upgrade" && apt-get update && apt-get dist-upgrade -y
+
+ADD . /pyjnius
+RUN cd /pyjnius && git clean -xfd
 
 CMD /pyjnius/.test.sh /out/$DOCKER_TAG
 HERE
