@@ -2,193 +2,37 @@ PyJNIus
 =======
 
 A Python module to access Java classes as Python classes using JNI.
-Warning: the pypi name is now `pyjnius` instead of `jnius`.
 
-[![Build Status](https://travis-ci.org/kivy/pyjnius.svg?branch=master)](https://travis-ci.org/kivy/pyjnius)
-[![PyPI](https://img.shields.io/pypi/v/pyjnius.svg)]()
-[![Backers on Open Collective](https://opencollective.com/kivy/backers/badge.svg)](#backers) 
-[![Sponsors on Open Collective](https://opencollective.com/kivy/sponsors/badge.svg)](#sponsors) 
+This fork maintained by the ANT Center is provided for our users as a fallback when the [upstream version](https://github.com/kivy/pyjnius) is broken.
 
-Installation
-------------
 
-Requirements: Cython
+## Differences from Upstream
 
-```
+- We've [patched it to work on Java 12 and above](https://github.com/kivy/pyjnius/pull/435)
+- This readme
+
+View the [full comparison on GitHub](https://github.com/kivy/pyjnius/compare/master...ANTCenter:master).
+
+## Installing
+
+### Prerequisites
+- A Java JDK such as [OpenJDK](https://jdk.java.net/) where...
+   - If you're using a JDK earlier than version 9, the `JAVA_HOME` environment variable is set.
+   - If you're using windows, both `javac` and `jvm.dll` are on your `PATH`
+- git
+- A C++ build environment. Windows users can download [C++ Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) for free from Microsoft.
+- Python with development headers. Linux users can install their system's `python3-devel` (rpm-based) or `python3-dev` (deb based) package. Mac users can install a working python through [homebrew](https://brew.sh). Windows users should use [Anaconda](https://www.anaconda.com/distribution)
+- pip (bundled with anaconda, `python3-pip` in many package managers)
+
+
+### pip install command
+
+```bash
 pip install Cython
-pip install pyjnius
+pip install -U 'git+https://github.com/ANTCenter/pyjnius.git'
 ```
 
-Quick overview
---------------
+## Find any bugs? Can't install?
 
-```python
->>> from jnius import autoclass
->>> autoclass('java.lang.System').out.println('Hello world')
-Hello world
+Upstream accepts [issues](https://github.com/kivy/pyjnius/issues) and [pull requests](https://github.com/kivy/pyjnius/pulls). We keep an eye on these, and will generally try to make sure this fork is in a usable state.
 
->>> Stack = autoclass('java.util.Stack')
->>> stack = Stack()
->>> stack.push('hello')
->>> stack.push('world')
->>> print stack.pop()
-world
->>> print stack.pop()
-hello
-```
-
-Usage on desktop
-----------------
-
-You need a java JDK installed (OpenJDK will do), Cython and make to build it.
-Please ensure that your `JDK_HOME` or `JAVA_HOME` environment variable points
-to the installed JDK root directory, and that the JVM library (`jvm.so` or
-`jvm.dll`) is available from your `PATH` environment variable. **Failure to do
-so may result in a failed install, or a successful install but inability to
-use the pyjnius library.**
-
-    make
-
-That's it! You can run the tests using
-
-    make tests
-
-to ensure everything is running correctly.
-
-Usage with python-for-android
------------------------------
-
-* Get http://github.com/kivy/python-for-android
-* Compile a distribution with kivy (pyjnius will be automatically added)
-* Then, you can do this kind of thing:
-
-```python
-from time import sleep
-from jnius import autoclass
-
-Hardware = autoclass('org.renpy.android.Hardware')
-print 'DPI is', Hardware.getDPI()
-
-Hardware.accelerometerEnable(True)
-for x in xrange(20):
-    print Hardware.accelerometerReading()
-    sleep(.1)
-```
-
-It will output something like:
-
-```
-I/python  ( 5983): Android kivy bootstrap done. __name__ is __main__
-I/python  ( 5983): Run user program, change dir and execute main.py
-I/python  ( 5983): DPI is 160
-I/python  ( 5983): [0.0, 0.0, 0.0]
-I/python  ( 5983): [-0.0095768067985773087, 9.3852710723876953, 2.2218191623687744]
-I/python  ( 5983): [-0.0095768067985773087, 9.3948478698730469, 2.2218191623687744]
-I/python  ( 5983): [-0.0095768067985773087, 9.3948478698730469, 2.2026655673980713]
-I/python  ( 5983): [-0.028730420395731926, 9.4044246673583984, 2.2122423648834229]
-I/python  ( 5983): [-0.019153613597154617, 9.3852710723876953, 2.2026655673980713]
-I/python  ( 5983): [-0.028730420395731926, 9.3852710723876953, 2.2122423648834229]
-I/python  ( 5983): [-0.0095768067985773087, 9.3852710723876953, 2.1835119724273682]
-I/python  ( 5983): [-0.0095768067985773087, 9.3756942749023438, 2.1835119724273682]
-I/python  ( 5983): [0.019153613597154617, 9.3948478698730469, 2.2122423648834229]
-I/python  ( 5983): [0.038307227194309235, 9.3852710723876953, 2.2218191623687744]
-I/python  ( 5983): [-0.028730420395731926, 9.3948478698730469, 2.2026655673980713]
-I/python  ( 5983): [-0.028730420395731926, 9.3852710723876953, 2.2122423648834229]
-I/python  ( 5983): [-0.038307227194309235, 9.3756942749023438, 2.2026655673980713]
-I/python  ( 5983): [0.3926490843296051, 9.3086557388305664, 1.3311761617660522]
-I/python  ( 5983): [-0.10534487664699554, 9.4331550598144531, 2.1068975925445557]
-I/python  ( 5983): [0.26815059781074524, 9.3469638824462891, 2.3463177680969238]
-I/python  ( 5983): [-0.1149216815829277, 9.3852710723876953, 2.31758713722229]
-I/python  ( 5983): [-0.038307227194309235, 9.41400146484375, 1.8674772977828979]
-I/python  ( 5983): [0.13407529890537262, 9.4235782623291016, 2.2026655673980713]
-```
-
-Advanced example
-----------------
-
-When you use autoclass, it will discover all the methods and fields of the
-object and resolve them. For now, it is better to declare and use only what you
-need. The previous example can be done manually as follows:
-
-```python
-from time import sleep
-from jnius import MetaJavaClass, JavaClass, JavaMethod, JavaStaticMethod
-
-class Hardware(JavaClass):
-    __metaclass__ = MetaJavaClass
-    __javaclass__ = 'org/renpy/android/Hardware'
-    vibrate = JavaStaticMethod('(D)V')
-    accelerometerEnable = JavaStaticMethod('(Z)V')
-    accelerometerReading = JavaStaticMethod('()[F')
-    getDPI = JavaStaticMethod('()I')
-    
-# use that new class!
-print 'DPI is', Hardware.getDPI()
-
-Hardware.accelerometerEnable()
-for x in xrange(20):
-    print Hardware.accelerometerReading()
-    sleep(.1)
-```
-
-Support
--------
-
-If you need assistance, you can ask for help on our mailing list:
-
-* User Group : https://groups.google.com/group/kivy-users
-* Email      : kivy-users@googlegroups.com
-
-We also have an IRC channel:
-
-* Server  : irc.freenode.net
-* Port    : 6667, 6697 (SSL only)
-* Channel : #kivy
-
-Contributing
-------------
-
-We love pull requests and discussing novel ideas. Check out our
-[contribution guide](http://kivy.org/docs/contribute.html) and
-feel free to improve PyJNIus.
-
-The following mailing list and IRC channel are used exclusively for
-discussions about developing the Kivy framework and its sister projects:
-
-* Dev Group : https://groups.google.com/group/kivy-dev
-* Email     : kivy-dev@googlegroups.com
-
-IRC channel:
-
-* Server  : irc.freenode.net
-* Port    : 6667, 6697 (SSL only)
-* Channel : #kivy-dev
-
-License
--------
-
-PyJNIus is released under the terms of the MIT License. Please refer to the
-LICENSE file.
-
-
-## Backers
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/kivy#backer)]
-
-<a href="https://opencollective.com/kivy#backers" target="_blank"><img src="https://opencollective.com/kivy/backers.svg?width=890"></a>
-
-
-## Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/kivy#sponsor)]
-
-<a href="https://opencollective.com/kivy/sponsor/0/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/1/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/2/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/3/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/4/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/5/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/6/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/7/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/8/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/kivy/sponsor/9/website" target="_blank"><img src="https://opencollective.com/kivy/sponsor/9/avatar.svg"></a>
