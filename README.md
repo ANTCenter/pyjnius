@@ -8,11 +8,10 @@ This fork maintained by the ANT Center is provided for our users as a fallback w
 
 ## Differences from Upstream
 
-- We've [patched it to work on Java 12 and above](https://github.com/kivy/pyjnius/pull/435)
-- We've applied [this pull request by github user @ctrueden](https://github.com/kivy/pyjnius/pull/441) and [adjusted it further](https://github.com/ctrueden/pyjnius/pull/1) to make pyjnius compatible with modern versions of macOS.
+- We're slightly behind master at the moment. Official pyjnius merged our PRs, and a bunch of others we hadn't vetted. We'll sync up as soon as we've had time to test the new stuff.
 - This readme
 
-View the [full comparison on GitHub](https://github.com/kivy/pyjnius/compare/master...ANTCenter:master).
+View the [full comparison on GitHub](https://github.com/kivy/pyjnius/compare/ANTCenter:master...master).
 
 ## Installing
 
